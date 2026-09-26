@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://storm-royale.vercel.app/sitemap.xml
+Sitemap: https://mr1charles.github.io/sitemap.xml

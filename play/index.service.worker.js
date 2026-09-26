@@ -1,7 +1,7 @@
 // Storm Royale service worker (replaces Godot's default after export, see tools/patch_web.py).
 // Network-first: players always get the newest build when online; the cache is only an offline fallback.
 // A new version takes over immediately (skipWaiting + clients.claim) and the page reloads once.
-const CACHE_NAME = 'storm-royale-20260926104044';
+const CACHE_NAME = 'storm-royale-20260926105344';
 const OFFLINE_URL = 'index.offline.html';
 const FILES = ["index.apple-touch-icon.png", "index.audio.position.worklet.js", "index.audio.worklet.js", "index.html", "index.icon.png", "index.js", "index.offline.html", "index.pck", "index.wasm"];
 
