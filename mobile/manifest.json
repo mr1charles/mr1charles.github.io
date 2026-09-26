@@ -1,0 +1,12 @@
+{
+  "name": "Storm Royale Mobile",
+  "short_name": "Storm Mobile",
+  "description": "Lightweight Storm Royale for iPads, phones, Chromebooks and low-end PCs: 3v3 soccer and Battle Royale Lite.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0b0e17",
+  "theme_color": "#0b0e17",
+  "icons": [{ "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }]
+}
