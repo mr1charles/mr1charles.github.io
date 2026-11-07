@@ -205,6 +205,8 @@ var TMAP={
 1:["Deng Xiaoping","Economic Liberalization","Democratization","Liberalization","Regulatory System","Open-Market Policies","Free-Trade","Economic Reforms","Bureaucrats","GDP","Reform and Opening Up Movement","One Child Policy","Annual Growth Rates","Tiananmen Square"],
 2:["Soviet Union","United Nations","Mikhail Gorbachev's Glasnost and Perestroika","Stalin's Five Year Plan","U.S. Policy of Containment","Russia and Cold War","Containment","Militarism","Welfare State"],
 3:["Adam Smith","World Bank","Environmentalists Movements","Western Consumer Culture","Western Societies","Economic Isolationism","Globalization","Intolerance"]};
+var CLASH=[["Economic Liberalization","Liberalization","Open-Market Policies","Reform and Opening Up Movement","Economic Reforms","Democratization"],["Containment","U.S. Policy of Containment"],["Five Year Plans","Stalin's Five Year Plan"],["Free-Trade","Globalization","Open-Market Policies"]];
+function clash(a,b){return CLASH.some(function(g){return g.indexOf(a)>-1&&g.indexOf(b)>-1})}
 var TOPOF={};Object.keys(TMAP).forEach(function(k){TMAP[k].forEach(function(n){TOPOF[n]=+k})});
 var EX=[
 {id:"x4",q:"Exam Q4. The implementation of which policy in China best explains the trend shown on the chart after 1980?",stim:"The chart was not in what you sent, so this uses the date and the wording.",o:["Economic liberalization following the failure of Mao Zedong's economic programs","Increased persecution of government critics in the countryside during the Cultural Revolution","Expanding military spending on the navy following the discovery of natural resources in the South China Sea","Accepting economic assistance provided by international institutions such as the World Bank"],a:0,top:1,why:"After the Great Leap Forward and the Cultural Revolution hurt the economy, Deng's Reform and Opening Up (1978) allowed private business and foreign trade. That is economic liberalization, and it explains growth after 1980. The Cultural Revolution was 1966 to 1976, so it is before 1980.",sure:true},
@@ -303,8 +305,8 @@ function ask(){
     var m=mode==='mix'?(Math.random()<0.5?'def':'term'):mode;cur.m=m;
     $('src').textContent=TOP[it.top];$('stim').hidden=true;
     $('q').textContent=m==='def'?it.t[0]:it.t[1];
-    var same=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top===it.top}));
-    var rest=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top!==it.top}));
+    var same=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top===it.top&&!clash(o.t[0],it.t[0])}));
+    var rest=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top!==it.top&&!clash(o.t[0],it.t[0])}));
     var others=same.concat(rest).slice(0,3);
     choices=shuffle(others.concat([it])).map(function(o){return {txt:m==='def'?o.t[1]:o.t[0],right:o===it}});
   }
