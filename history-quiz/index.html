@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>China Smart Quiz</title>
+<title>History Smart Quiz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
@@ -93,14 +93,14 @@ details[open] summary{margin-bottom:6px}
 <div class="wrap">
   <header>
     <div class="eyebrow"><a href="/" style="color:inherit">← LaunchUp</a> · History</div>
-    <h1>China Smart Quiz</h1>
+    <h1>History Smart Quiz</h1>
     <p class="muted">Timed and adaptive: it brings back what you miss or answer slowly.</p>
   </header>
 
 
   <section class="panel" id="p-quiz">
     <div class="box">
-      <h2>Communist China review</h2>
+      <h2>Trimester 1 review</h2>
       <p class="muted">The quiz times every answer and remembers your results on this device. Slow or wrong answers come back sooner. Answer with a tap or the 1 to 4 keys.</p>
       <div class="dash" id="dash"></div>
       <h3>Accuracy by topic</h3><div class="topics" id="topics"></div>
@@ -117,7 +117,8 @@ details[open] summary{margin-bottom:6px}
       <div class="row">
         <button class="btn" id="go-ad">Smart round (12)</button>
         <button class="btn ghost" id="go-exam">Retry my 7 missed exam questions</button>
-        <button class="btn ghost" id="go-all">All 49 terms</button>
+        <button class="btn" id="go-55">Exam round (55)</button>
+        <button class="btn ghost" id="go-all">All terms</button>
       </div>
       <p class="muted" id="hint">Smart round picks what you miss, answer slowly, or have not seen yet.</p>
     </div>
@@ -196,16 +197,103 @@ var T=[
 ["One Child Policy","Chinese policy that generally limited families to one child to slow population growth."],
 ["Annual Growth Rates","The percentage an economy or population grows in one year."],
 ["Tiananmen Square","Place in Beijing where pro-democracy protests were violently stopped by the Chinese government in 1989."],
-["People's Liberation Movement","China's Communist military, known as the People's Liberation Army, which helped the Communists win the civil war."]
+["People's Liberation Movement","China's Communist military, known as the People's Liberation Army, which helped the Communists win the civil war."],
+["Imperialism", "When a powerful country takes control of other lands to gain resources, markets and power."],
+["Industrial Revolution", "The shift to machine and factory production that began in Britain and drove imperial expansion."],
+["Alliance System", "Secret agreements before World War I that pulled many nations into a war once it started."],
+["Treaty of Versailles", "1919 treaty that ended World War I and punished Germany with blame, lost land and reparations."],
+["League of Nations", "Organization created after World War I to keep peace, but weak because the U.S. never joined and it had no army."],
+["Russian Revolution of 1917", "Uprisings that overthrew the tsar and led to Lenin and the Bolsheviks creating a communist state."],
+["Great Depression", "Worldwide economic collapse in the 1930s with mass unemployment that helped extremists rise to power."],
+["Fascism", "Extreme nationalist ideology that puts the state above the individual and is led by a dictator, as in Italy and Germany."],
+["Totalitarianism", "Government that tries to control nearly every part of public and private life."],
+["Appeasement", "Giving in to an aggressor's demands to avoid war, like the Munich Agreement with Hitler."],
+["Genocide", "The deliberate destruction of a national, ethnic, racial or religious group."],
+["Holocaust", "Nazi Germany's genocide that murdered about six million Jews and millions of others."],
+["Axis Powers", "Germany, Italy and Japan, the main enemies of the Allies in World War II."],
+["Hiroshima and Nagasaki", "Japanese cities hit by U.S. atomic bombs in August 1945, which helped end World War II."],
+["Superpower", "A country with enough military and economic strength to influence the whole world, like the U.S. and USSR after 1945."],
+["Iron Curtain", "Winston Churchill's phrase for the divide between communist Eastern Europe and the democratic West."],
+["NATO", "1949 military alliance of the U.S., Canada and Western European nations against Soviet expansion."],
+["Warsaw Pact", "1955 military alliance of the Soviet Union and its Eastern European satellite states."],
+["Truman Doctrine", "U.S. policy to give aid to countries resisting communism, starting with Greece and Turkey."],
+["Marshall Plan", "U.S. aid program that rebuilt Western Europe after World War II to stop communism from spreading."],
+["Berlin Airlift", "1948-49 effort by the Western Allies to fly supplies into West Berlin when the Soviets blocked roads and rail."],
+["Berlin Wall", "Barrier built in 1961 by East Germany to stop people fleeing to West Berlin; it fell in 1989."],
+["Cuban Missile Crisis", "1962 standoff when the U.S. discovered Soviet missiles in Cuba, bringing the world close to nuclear war."],
+["Arms Race", "Competition between the U.S. and USSR to build more and better nuclear weapons."],
+["Space Race", "Cold War competition to reach space first, started when the Soviets launched Sputnik in 1957."],
+["Proxy War", "A war where superpowers support opposing sides in another country instead of fighting each other directly."],
+["Korean War", "1950-53 war in which communist North Korea, backed by China, fought South Korea, backed by the U.S. and UN."],
+["Vietnam War", "Long Cold War conflict in which the U.S. backed South Vietnam against communist North Vietnam."],
+["Domino Theory", "Belief that if one country fell to communism, its neighbors would fall too."],
+["Detente", "Easing of tensions between the U.S. and USSR in the 1970s, including arms-control talks."],
+["Satellite States", "Eastern European countries controlled by the Soviet Union after World War II."],
+["Decolonization", "The process of colonies gaining independence from European powers after World War II."],
+["Nationalism", "Strong pride and loyalty to one's nation, which drove colonized peoples to demand independence."],
+["Mohandas Gandhi", "Leader of India's independence movement who used nonviolent resistance against British rule."],
+["Nonviolent Resistance", "Protesting injustice through boycotts, marches and civil disobedience instead of violence."],
+["Salt March", "1930 protest led by Gandhi against the British salt tax, walking to the sea to make salt."],
+["Partition of India", "1947 division of British India into mostly Hindu India and mostly Muslim Pakistan, causing violence and mass migration."],
+["Muhammad Ali Jinnah", "Leader of the Muslim League who pushed for a separate Muslim nation and became Pakistan's first leader."],
+["Jawaharlal Nehru", "First prime minister of independent India."],
+["Kwame Nkrumah", "Led the Gold Coast to independence in 1957 as Ghana, the first sub-Saharan colony to gain it."],
+["Mau Mau Uprising", "1950s Kenyan rebellion against British rule and land seizures."],
+["Algerian War of Independence", "Brutal 1954-62 war in which Algerians fought France for independence."],
+["Apartheid", "South Africa's system of legal racial segregation that gave power to the white minority."],
+["Nelson Mandela", "Anti-apartheid leader jailed for 27 years who became South Africa's first Black president in 1994."],
+["African National Congress", "South African political movement that fought apartheid, led by Nelson Mandela."],
+["Non-Aligned Movement", "Group of nations that refused to side with either the U.S. or the USSR in the Cold War."],
+["Pan-Africanism", "Idea that people of African descent should unite and cooperate."],
+["Neocolonialism", "When powerful countries still control former colonies through economic and political influence."],
+["Ho Chi Minh", "Vietnamese communist and nationalist who fought French and then American control."],
+["Dien Bien Phu", "1954 battle where Vietnamese forces defeated France, ending French rule in Indochina."],
+["Mandate System", "After World War I, the League of Nations gave Britain and France control of former Ottoman lands in the Middle East."],
+["Balfour Declaration", "1917 British statement supporting a Jewish homeland in Palestine."],
+["Zionism", "Movement to create a Jewish homeland in Palestine."],
+["Palestinian Refugees", "Arabs who fled or were forced from their homes during the 1948 war that created Israel."],
+["Six-Day War", "1967 war in which Israel captured the Sinai, Gaza, the West Bank, East Jerusalem and the Golan Heights."],
+["Suez Crisis", "1956 conflict after Egypt's Nasser took the Suez Canal; Britain, France and Israel attacked but had to withdraw."],
+["Gamal Abdel Nasser", "Egyptian leader who promoted Arab unity and nationalized the Suez Canal."],
+["Pan-Arabism", "Idea that Arab countries should unite politically and culturally."],
+["OPEC", "Organization of oil-producing countries that coordinates oil production and prices."],
+["1973 Oil Embargo", "Arab oil producers cut oil sales to nations supporting Israel, causing gas shortages and high prices."],
+["Camp David Accords", "1978 agreements in which Egypt became the first Arab country to make peace with Israel."],
+["Iranian Revolution", "1979 uprising that overthrew the Shah and created an Islamic republic led by religious leaders."],
+["Ayatollah Khomeini", "Religious leader who led Iran's 1979 revolution and became its supreme leader."],
+["Theocracy", "Government ruled by religious leaders according to religious law."],
+["PLO", "Palestine Liberation Organization, which fought for a Palestinian state and was led by Yasser Arafat."],
+["Intifada", "Palestinian uprisings against Israeli control of the West Bank and Gaza."],
+["Oslo Accords", "1990s agreements in which Israel and the PLO recognized each other and set up Palestinian self-government."],
+["Iran-Iraq War", "1980-88 war between Iran and Iraq under Saddam Hussein that killed hundreds of thousands."],
+["Persian Gulf War", "1991 war in which a U.S.-led coalition forced Iraq out of Kuwait."],
+["Fundamentalism", "Strict adherence to the basic beliefs of a religion, often wanting laws to follow them."],
+["Cuban Revolution", "1959 overthrow of dictator Batista by Fidel Castro, creating a communist state near the U.S."],
+["Fidel Castro", "Leader of the Cuban Revolution who ruled Cuba as a communist and allied with the USSR."],
+["Che Guevara", "Argentine revolutionary who helped Castro and promoted guerrilla warfare across Latin America."],
+["Bay of Pigs", "1961 failed U.S.-backed invasion of Cuba by Cuban exiles."],
+["Juan Peron", "Argentine president who won support from workers with populist policies and nationalism."],
+["Populism", "Politics that appeals to ordinary people against elites, often with a strong leader."],
+["Salvador Allende", "Socialist president of Chile overthrown in a 1973 military coup."],
+["Augusto Pinochet", "General who took power in Chile in 1973 and ruled as a harsh dictator."],
+["Dirty War", "Argentina's military government kidnapped and killed thousands of suspected opponents in the 1970s and early 80s."],
+["Liberation Theology", "Catholic movement in Latin America that tied the Church's mission to helping the poor and fighting injustice."],
+["Sandinistas", "Leftist rebels who overthrew Nicaragua's dictator in 1979 and fought U.S.-backed Contras."],
+["Import Substitution", "Policy of making goods at home with tariffs on foreign goods to reduce dependence on imports."],
+["Dependency Theory", "Idea that poor countries stay poor because their economies depend on exporting raw materials to rich countries."],
+["NAFTA", "1994 trade agreement removing most trade barriers between the U.S., Canada and Mexico."],
+["Neoliberalism", "Policies of free markets, privatization and less government spending pushed in Latin America in the 1980s and 90s."],
+["Debt Crisis", "1980s problem when Latin American countries could not repay huge foreign loans, forcing harsh austerity."],
+["Monroe Doctrine", "1823 U.S. warning to Europe not to interfere in the Americas, later used to justify U.S. intervention."],
+["Mexican Revolution", "1910-20 uprising that ended Porfirio Diaz's dictatorship and led to land reform promises."]
 ];
-
-var TOP=["Mao and communist rule","Deng and the reform era","Cold War and the Soviet Union","Global economy and society"];
+var TOP=["Mao and communist rule","Deng and the reform era","Cold War and the Soviet Union","Global economy and society","Modern era review: imperialism to World War II","Cold War events","Decolonization","Post-war Middle East","Modern Latin America"];
 var TMAP={
 0:["Mao Zedong","Communism","Karl Marx","Chiang Kai-Shek","1948 China Presidential Election","Qing Dynasty","Chinese Civil War","Cultural Revolution","Peasants","Chinese Communist Party","Great Leap Forward","Marx's Communist Manifesto","1919 May Fourth Movement","Nationalist (Kuomintang/KMT) Purges","Five Year Plans","Red Guards","Gang of Four","People's Liberation Movement"],
 1:["Deng Xiaoping","Economic Liberalization","Democratization","Liberalization","Regulatory System","Open-Market Policies","Free-Trade","Economic Reforms","Bureaucrats","GDP","Reform and Opening Up Movement","One Child Policy","Annual Growth Rates","Tiananmen Square"],
 2:["Soviet Union","United Nations","Mikhail Gorbachev's Glasnost and Perestroika","Stalin's Five Year Plan","U.S. Policy of Containment","Russia and Cold War","Containment","Militarism","Welfare State"],
-3:["Adam Smith","World Bank","Environmentalists Movements","Western Consumer Culture","Western Societies","Economic Isolationism","Globalization","Intolerance"]};
-var CLASH=[["Economic Liberalization","Liberalization","Open-Market Policies","Reform and Opening Up Movement","Economic Reforms","Democratization"],["Containment","U.S. Policy of Containment"],["Five Year Plans","Stalin's Five Year Plan"],["Free-Trade","Globalization","Open-Market Policies"]];
+3:["Adam Smith","World Bank","Environmentalists Movements","Western Consumer Culture","Western Societies","Economic Isolationism","Globalization","Intolerance"],4:["Imperialism", "Industrial Revolution", "Alliance System", "Treaty of Versailles", "League of Nations", "Russian Revolution of 1917", "Great Depression", "Fascism", "Totalitarianism", "Appeasement", "Genocide", "Holocaust", "Axis Powers", "Hiroshima and Nagasaki"],5:["Superpower", "Iron Curtain", "NATO", "Warsaw Pact", "Truman Doctrine", "Marshall Plan", "Berlin Airlift", "Berlin Wall", "Cuban Missile Crisis", "Arms Race", "Space Race", "Proxy War", "Korean War", "Vietnam War", "Domino Theory", "Detente", "Satellite States"],6:["Decolonization", "Nationalism", "Mohandas Gandhi", "Nonviolent Resistance", "Salt March", "Partition of India", "Muhammad Ali Jinnah", "Jawaharlal Nehru", "Kwame Nkrumah", "Mau Mau Uprising", "Algerian War of Independence", "Apartheid", "Nelson Mandela", "African National Congress", "Non-Aligned Movement", "Pan-Africanism", "Neocolonialism", "Ho Chi Minh", "Dien Bien Phu"],7:["Mandate System", "Balfour Declaration", "Zionism", "Palestinian Refugees", "Six-Day War", "Suez Crisis", "Gamal Abdel Nasser", "Pan-Arabism", "OPEC", "1973 Oil Embargo", "Camp David Accords", "Iranian Revolution", "Ayatollah Khomeini", "Theocracy", "PLO", "Intifada", "Oslo Accords", "Iran-Iraq War", "Persian Gulf War", "Fundamentalism"],8:["Cuban Revolution", "Fidel Castro", "Che Guevara", "Bay of Pigs", "Juan Peron", "Populism", "Salvador Allende", "Augusto Pinochet", "Dirty War", "Liberation Theology", "Sandinistas", "Import Substitution", "Dependency Theory", "NAFTA", "Neoliberalism", "Debt Crisis", "Monroe Doctrine", "Mexican Revolution"]};
+var CLASH=[["Economic Liberalization","Liberalization","Open-Market Policies","Reform and Opening Up Movement","Economic Reforms","Democratization"],["Containment","U.S. Policy of Containment"],["Five Year Plans","Stalin's Five Year Plan"],["Fascism","Totalitarianism"],["Genocide","Holocaust"],["Decolonization","Nationalism","Pan-Africanism","Neocolonialism"],["Pan-Africanism","Pan-Arabism"],["Mohandas Gandhi","Nonviolent Resistance","Salt March"],["Arms Race","Space Race","Proxy War"],["Populism","Juan Peron"],["Iran-Iraq War","Persian Gulf War"],["NATO","Warsaw Pact","Alliance System"],["Neoliberalism","NAFTA","Import Substitution","Dependency Theory"],["Camp David Accords","Oslo Accords"],["Free-Trade","Globalization","Open-Market Policies"]];
 function clash(a,b){return CLASH.some(function(g){return g.indexOf(a)>-1&&g.indexOf(b)>-1})}
 var TOPOF={};Object.keys(TMAP).forEach(function(k){TMAP[k].forEach(function(n){TOPOF[n]=+k})});
 var EX=[
@@ -363,6 +451,7 @@ function smart(){
 }
 $('go-ad').onclick=function(){begin(smart())};
 $('go-exam').onclick=function(){begin(ITEMS.filter(function(it){return it.kind==='exam'}))};
+$('go-55').onclick=function(){begin(pickWeighted(ITEMS,Math.min(55,ITEMS.length)))};
 $('go-all').onclick=function(){begin(shuffle(ITEMS.filter(function(it){return it.kind==='term'})))};
 $('again-smart').onclick=function(){begin(smart())};
 $('again-missed').onclick=function(){begin(shuffle(window._bad||[]))};
