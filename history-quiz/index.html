@@ -1,0 +1,380 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>China Smart Quiz</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: graph-paper page, blue pencil ink for the work, red pen for corrections. Two tabs: fixes and quiz. */
+:root{
+  --paper:#f6f8fb; --card:#ffffff; --ink:#1b2433; --muted:#5a6578; --line:#d5dce8; --grid:#e4e9f1;
+  --pencil:#2f5bd8; --pencil-soft:#e6edff; --pen:#c8283d; --pen-soft:#fdebee; --good:#17803d; --good-soft:#e5f5ea; --warn:#a15c00; --warn-soft:#fff2dc;
+  --f-display:'Bricolage Grotesque',system-ui,sans-serif; --f-body:'IBM Plex Sans',system-ui,sans-serif; --f-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#12161f; --card:#1a2030; --ink:#e8edf6; --muted:#9aa6bb; --line:#2c3549; --grid:#1b2232;
+  --pencil:#8fb0ff; --pencil-soft:#1f2b4d; --pen:#ff7b8c; --pen-soft:#3a1d24; --good:#5fd38a; --good-soft:#15301f; --warn:#f2b45a; --warn-soft:#352711; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#12161f; --card:#1a2030; --ink:#e8edf6; --muted:#9aa6bb; --line:#2c3549; --grid:#1b2232;
+  --pencil:#8fb0ff; --pencil-soft:#1f2b4d; --pen:#ff7b8c; --pen-soft:#3a1d24; --good:#5fd38a; --good-soft:#15301f; --warn:#f2b45a; --warn-soft:#352711; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px;
+  padding-block:24px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.15}
+h1{font-size:clamp(28px,6vw,40px)} h2{font-size:24px} h3{font-size:18px}
+p{margin:0} .muted{color:var(--muted)} .mono{font-family:var(--f-mono)}
+header{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--pencil);border-color:var(--pencil);color:#fff}
+.tab:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--pencil);outline-offset:2px}
+:root[data-theme="dark"] .tab[aria-selected="true"]{color:#0c1220}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tab[aria-selected="true"]{color:#0c1220}}
+.panel{display:flex;flex-direction:column;gap:18px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.habits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.habit{border-left:4px solid var(--pen);padding:2px 0 2px 12px;font-size:15px}
+.habit b{display:block;font-family:var(--f-display);font-size:16px}
+.formulas{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px 18px;font-family:var(--f-mono);font-size:15px}
+.formulas span{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:4px 0}
+.formulas em{font-style:normal;color:var(--muted);font-family:var(--f-body);font-size:13px}
+.task{display:flex;flex-direction:column;gap:10px}
+.task-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.score{font-size:13px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--pencil-soft);color:var(--pencil)}
+.fix{border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.fix.bad{border-color:var(--pen);background:var(--pen-soft)} .fix.part{border-color:var(--warn);background:var(--warn-soft)} .fix.ok{border-color:var(--good);background:var(--good-soft)}
+.tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.bad .tag{color:var(--pen)} .part .tag{color:var(--warn)} .ok .tag{color:var(--good)}
+.fix h4{margin:0;font-family:var(--f-display);font-size:16px}
+.fix .wrote{color:var(--muted);font-size:14px}
+.fix .ans{font-family:var(--f-mono);font-size:14.5px;overflow-x:auto}
+details summary{cursor:pointer;font-weight:600;color:var(--pencil)}
+details[open] summary{margin-bottom:6px}
+/* quiz */
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--pencil);transition:width .25s}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{font:inherit;padding:8px 14px;border:0;background:var(--card);color:var(--ink);cursor:pointer;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--pencil-soft);color:var(--pencil);font-weight:600}
+.btn{font:inherit;font-weight:600;padding:10px 18px;border-radius:8px;border:1.5px solid var(--pencil);background:var(--pencil);color:#fff;cursor:pointer}
+:root[data-theme="dark"] .btn{color:#0c1220}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn{color:#0c1220}}
+.btn.ghost{background:transparent;color:var(--pencil)}
+.q{font-family:var(--f-display);font-size:clamp(20px,4.5vw,26px);line-height:1.25;text-wrap:balance}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;text-align:left;padding:12px 14px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:flex;gap:12px;align-items:flex-start}
+.opt kbd{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--muted);flex:none;margin-top:3px}
+.opt:hover:not(:disabled){border-color:var(--pencil)}
+.opt.right{border-color:var(--good);background:var(--good-soft)} .opt.wrong{border-color:var(--pen);background:var(--pen-soft)}
+.stat{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted)} .stat b{color:var(--ink);font-family:var(--f-mono)}
+.miss{display:grid;gap:8px} .miss div{border-left:4px solid var(--pen);padding-left:12px;font-size:15px}
+.miss b{font-family:var(--f-display)}
+
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.dash div{border:1.5px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.dash b{font-family:var(--f-mono);font-size:22px} .dash span{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.topics{display:grid;gap:8px}.trow{display:grid;grid-template-columns:minmax(120px,190px) 1fr 52px;gap:10px;align-items:center;font-size:14px}
+.trow .bar{height:10px}.trow i.low{background:var(--pen)}.trow i.mid{background:var(--warn)}.trow i.hi{background:var(--good)}
+.trow em{font-style:normal;font-family:var(--f-mono);text-align:right}
+.timer{font-family:var(--f-mono);font-size:15px;color:var(--muted)} .timer.late{color:var(--pen)}
+.fb{border-radius:8px;padding:12px 14px;font-size:15px;display:flex;flex-direction:column;gap:6px}
+.fb.good{background:var(--good-soft);border:1.5px solid var(--good)}.fb.slow{background:var(--warn-soft);border:1.5px solid var(--warn)}.fb.bad{background:var(--pen-soft);border:1.5px solid var(--pen)}
+.fb b{font-family:var(--f-display)}
+.src{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--pencil);font-weight:600}
+.stim{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px}
+.weak{display:grid;gap:6px;font-size:15px}.weak div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding:4px 0}.weak span{font-family:var(--f-mono);font-size:13px;color:var(--muted);white-space:nowrap}
+.btn.danger{background:transparent;border-color:var(--pen);color:var(--pen)}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+</style>
+
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow"><a href="/" style="color:inherit">← LaunchUp</a> · History</div>
+    <h1>China Smart Quiz</h1>
+    <p class="muted">Timed and adaptive: it brings back what you miss or answer slowly.</p>
+  </header>
+
+
+  <section class="panel" id="p-quiz">
+    <div class="box">
+      <h2>Communist China review</h2>
+      <p class="muted">The quiz times every answer and remembers your results on this device. Slow or wrong answers come back sooner. Answer with a tap or the 1 to 4 keys.</p>
+      <div class="dash" id="dash"></div>
+      <h3>Accuracy by topic</h3><div class="topics" id="topics"></div>
+      <h3>Weak spots right now</h3><div class="weak" id="weak"></div>
+    </div>
+    <div class="box">
+      <div class="row">
+        <div class="seg" role="group" aria-label="Question style">
+          <button id="m-mix" aria-pressed="true">Mixed</button>
+          <button id="m-def" aria-pressed="false">Term, pick meaning</button>
+          <button id="m-term" aria-pressed="false">Meaning, pick term</button>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn" id="go-ad">Smart round (12)</button>
+        <button class="btn ghost" id="go-exam">Retry my 7 missed exam questions</button>
+        <button class="btn ghost" id="go-all">All 49 terms</button>
+      </div>
+      <p class="muted" id="hint">Smart round picks what you miss, answer slowly, or have not seen yet.</p>
+    </div>
+    <div class="box" id="game" hidden>
+      <div class="bar"><i id="prog"></i></div>
+      <div class="stat"><span>Question <b id="n">1</b> of <b id="tot">0</b></span><span>Correct <b id="ok">0</b></span><span>Streak <b id="streak">0</b></span><span class="timer" id="timer">0.0s</span></div>
+      <div class="src" id="src"></div>
+      <div class="q" id="q"></div>
+      <div class="stim" id="stim" hidden></div>
+      <div class="opts" id="opts"></div>
+      <div class="fb" id="fb" hidden></div>
+      <div class="row"><button class="btn" id="next" hidden>Next</button></div>
+    </div>
+    <div class="box" id="done" hidden>
+      <h2 id="result"></h2>
+      <div class="dash" id="rdash"></div>
+      <h3>This round by topic</h3><div class="topics" id="rtopics"></div>
+      <h3 id="mh">Missed</h3><div class="miss" id="missed"></div>
+      <div class="row"><button class="btn" id="again-missed">Retry what I missed</button><button class="btn ghost" id="again-smart">New smart round</button></div>
+    </div>
+    <div class="box">
+      <p class="muted">Three of the exam answers below are my best reasoning, because the charts and passages were not in what you sent. Q12 (Yin Zeming pamphlet) is left out for that reason. Check any doubtful one against your teacher's answer key.</p>
+      <div class="row"><button class="btn danger" id="reset">Reset my quiz history</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+var T=[
+["Mao Zedong","Leader of China who established Communist rule in 1949."],
+["United Nations","International organization created in 1945 to promote peace and cooperation."],
+["Soviet Union","Communist country that existed from 1922 to 1991 and competed with the U.S. during the Cold War."],
+["Communism","System where resources are collectively owned and the goal is to create a classless society."],
+["Deng Xiaoping","Chinese leader who introduced economic reforms and opened China to foreign trade in 1978."],
+["Karl Marx","Philosopher who developed communist ideas and believed workers should overthrow capitalism."],
+["Chiang Kai-Shek","Leader of China's Nationalists who lost the civil war and fled to Taiwan."],
+["Adam Smith","Economist who supported capitalism, free markets, and competition."],
+["1948 China Presidential Election","Election in which Chiang Kai-Shek became president of the Republic of China."],
+["Qing Dynasty","Last imperial dynasty of China, which ended in 1912."],
+["Chinese Civil War","War between the Chinese Communists and Nationalists that ended in 1949 with a Communist victory."],
+["Economic Liberalization","Reducing government control over the economy and allowing more private businesses."],
+["Cultural Revolution","Mao's movement beginning in 1966 to strengthen communism by removing people and ideas he considered enemies."],
+["World Bank","International organization that provides loans to help developing countries improve their economies."],
+["Democratization","The process of creating a more democratic government with elections and greater freedoms."],
+["Environmentalists Movements","Movements that work to protect nature and reduce pollution."],
+["Western Consumer Culture","Culture focused on buying goods, products, technology, and services."],
+["Western Societies","Societies influenced by European ideas, capitalism, democracy, and individual rights."],
+["Peasants","Rural farmers and agricultural workers who played an important role in China's Communist Revolution."],
+["Chinese Communist Party","Political party that took control of China in 1949 and continues to rule today."],
+["Great Leap Forward","Mao's campaign to rapidly industrialize China that caused a massive famine and millions of deaths."],
+["Liberalization","Reducing government restrictions and allowing more freedom."],
+["Regulatory System","Government rules and laws that control businesses and economic activity."],
+["Open-Market Policies","Policies that allow businesses to compete with fewer government restrictions."],
+["Free-Trade","Buying and selling goods between countries with few or no trade restrictions."],
+["Economic Reforms","Changes made to improve an economy and encourage growth."],
+["Mikhail Gorbachev's Glasnost and Perestroika","Glasnost meant openness; Perestroika meant restructuring the Soviet economy and government."],
+["Stalin's Five Year Plan","Economic plans designed to rapidly industrialize the Soviet Union."],
+["Marx's Communist Manifesto","1848 pamphlet by Marx and Engels explaining communist ideas and calling for workers to unite against capitalism."],
+["U.S. Policy of Containment","American policy of stopping communism from spreading to other countries."],
+["Welfare State","Government system that provides services like healthcare, education, and financial assistance."],
+["Economic Isolationism","Restricting trade and economic relationships with other countries."],
+["Russia and Cold War","The Soviet Union was America's main rival during the Cold War, competing in military, political, and economic power."],
+["Containment","Stopping the spread of communism to new countries."],
+["Militarism","Belief in maintaining a strong military and using military power."],
+["Globalization","Increasing connections between countries through trade, technology, communication, and culture."],
+["Intolerance","Refusing to accept different beliefs, cultures, or opinions."],
+["1919 May Fourth Movement","Chinese protests against foreign influence that encouraged nationalism and political change."],
+["Nationalist (Kuomintang/KMT) Purges","Chiang Kai-Shek's violent attacks against Chinese Communists, especially in 1927."],
+["Five Year Plans","Government plans that set economic and production goals for five years."],
+["GDP","Total value of goods and services produced by a country."],
+["Bureaucrats","Government officials who manage departments and carry out policies."],
+["Red Guards","Young people who supported Mao and attacked people they believed opposed communism during the Cultural Revolution."],
+["Gang of Four","Four radical Communist leaders who helped lead the Cultural Revolution and were arrested after Mao died."],
+["Reform and Opening Up Movement","Deng Xiaoping's 1978 policy that opened China to foreign trade, investment, and private businesses."],
+["One Child Policy","Chinese policy that generally limited families to one child to slow population growth."],
+["Annual Growth Rates","The percentage an economy or population grows in one year."],
+["Tiananmen Square","Place in Beijing where pro-democracy protests were violently stopped by the Chinese government in 1989."],
+["People's Liberation Movement","China's Communist military, known as the People's Liberation Army, which helped the Communists win the civil war."]
+];
+
+var TOP=["Mao and communist rule","Deng and the reform era","Cold War and the Soviet Union","Global economy and society"];
+var TMAP={
+0:["Mao Zedong","Communism","Karl Marx","Chiang Kai-Shek","1948 China Presidential Election","Qing Dynasty","Chinese Civil War","Cultural Revolution","Peasants","Chinese Communist Party","Great Leap Forward","Marx's Communist Manifesto","1919 May Fourth Movement","Nationalist (Kuomintang/KMT) Purges","Five Year Plans","Red Guards","Gang of Four","People's Liberation Movement"],
+1:["Deng Xiaoping","Economic Liberalization","Democratization","Liberalization","Regulatory System","Open-Market Policies","Free-Trade","Economic Reforms","Bureaucrats","GDP","Reform and Opening Up Movement","One Child Policy","Annual Growth Rates","Tiananmen Square"],
+2:["Soviet Union","United Nations","Mikhail Gorbachev's Glasnost and Perestroika","Stalin's Five Year Plan","U.S. Policy of Containment","Russia and Cold War","Containment","Militarism","Welfare State"],
+3:["Adam Smith","World Bank","Environmentalists Movements","Western Consumer Culture","Western Societies","Economic Isolationism","Globalization","Intolerance"]};
+var TOPOF={};Object.keys(TMAP).forEach(function(k){TMAP[k].forEach(function(n){TOPOF[n]=+k})});
+var EX=[
+{id:"x4",q:"Exam Q4. The implementation of which policy in China best explains the trend shown on the chart after 1980?",stim:"The chart was not in what you sent, so this uses the date and the wording.",o:["Economic liberalization following the failure of Mao Zedong's economic programs","Increased persecution of government critics in the countryside during the Cultural Revolution","Expanding military spending on the navy following the discovery of natural resources in the South China Sea","Accepting economic assistance provided by international institutions such as the World Bank"],a:0,top:1,why:"After the Great Leap Forward and the Cultural Revolution hurt the economy, Deng's Reform and Opening Up (1978) allowed private business and foreign trade. That is economic liberalization, and it explains growth after 1980. The Cultural Revolution was 1966 to 1976, so it is before 1980.",sure:true},
+{id:"x5",q:"Exam Q5. The demographic changes in the chart also contributed most directly to which of the following in China after circa 1990?",stim:"The chart was not in what you sent. Best reasoning: fast urban and industrial growth.",o:["Increased democratization of the Chinese political system","The emergence of environmentalist movements advocating for policies to curb air and water pollution","The rejection of Western consumer culture by China's new middle classes","The spread of food shortages resulting from declining agricultural production"],a:1,top:3,why:"Rapid growth moved people into cities and factories, which brought air and water pollution, and environmentalist movements followed. Democratization did not happen (Tiananmen 1989 was crushed), the new middle class embraced Western consumer culture, and food shortages belong to the Great Leap Forward.",sure:false},
+{id:"x8",q:"Exam Q8. Li Zhisui's description of the local party secretaries' actions in the third paragraph can most directly explain how individuals in communist China reacted to the government's...",o:["use of propaganda that advocated for spreading the communist revolution in Western societies","implementation of cultural policies that attempted to suppress the practice of religion","use of physical violence against anyone seen as not fulfilling the mandates of the central Chinese leadership","glorification of peasant military contributions and suffering during the war with Japan"],a:2,top:0,why:"During the Great Leap Forward, local secretaries forced peasants to hit iron and steel quotas and punished anyone who fell short. People reacted to that violence and pressure. You got Q7, 9, 10 and 11 right on this same passage, so this one was a close read.",sure:true},
+{id:"x14",q:"Exam Q14. All of these are accurate about the 1980s and 1990s. Which could best have been cited then to explain a LIMITATION in Deng Xiaoping's arguments about the benefits of his reforms?",o:["The economic production of many communist states declined partly because they did not have the capital to invest in new manufacturing centers or repair existing centers.","Some Asian states were forced to adopt free-trade, open-market policies as part of receiving economic assistance from the International Monetary Fund.","Some Asian states reformed their economies based on both free-trade, open-market policies and the Japanese model of close cooperation between the government bureaucracy and large corporations.","The Soviet Union collapsed in part because the implementation of economic liberalization policies exposed the weakness of its economy."],a:3,top:2,why:"A limitation means a reason to doubt Deng's claim that reform is good. The Soviet collapse shows liberalization can expose a weak economy. The other three either support reform or are about how states reformed, not a limit on the benefit.",sure:false},
+{id:"x15",q:"Exam Q15. Which late-twentieth-century development could best explain a LIMITATION of the path of economic development in the passage?",o:["Although China liberalized its economy, it often used its newly created wealth to increase its influence in various world regions, such as Southeast Asia, Africa, and Latin America, often with controversial results.","While Asian states such as China experienced economic growth because of liberal economic reforms, agricultural subsidies in Western nations prevented rural areas from experiencing the same rates of growth as urban areas.","While economic liberalization in Asian states such as China made Asia a center of global manufacturing, Western states became knowledge economies, which allowed for higher wages and standards of living for their populations.","Although China enacted economic reforms, the state maintained tight control over much of the economy, which in some cases allowed bureaucrats to prevent market distortions and transfer capital to important firms quickly."],a:2,top:3,why:"Best fit: a manufacturing-based path left Asia on low-wage factory work while the West moved to higher-paid knowledge jobs. That is a limit of the path. Option D describes a benefit, and A is about later influence, not the development path. I could not see the passage, so confirm with your key.",sure:false},
+{id:"x16",q:"Exam Q16. The ideas Deng Xiaoping suggests in the passage are most similar to...",o:["Mikhail Gorbachev's glasnost and perestroika.","Joseph Stalin's Five Year Plan.","Karl Marx's Communist Manifesto.","The United States' policy of containment."],a:0,top:2,why:"Both Deng and Gorbachev reformed a communist system from the inside. Perestroika meant restructuring the economy, like Deng's market reforms. Stalin's plans were state-run rapid industrialization, Marx was theory, and containment was a US policy to stop communism spreading.",sure:true},
+{id:"x19",q:"Exam Q19. In which twentieth-century context would artists most likely display works with a message similar to Wang Guangyi's painting?",stim:"Wang Guangyi mixes communist propaganda style with Western brand logos, a commentary on consumer culture in a communist state. The image was not in what you sent.",o:["The Soviet Union after the death of Lenin","Russia after the end of the Cold War","South Africa under apartheid","Germany during Nazi rule"],a:1,top:3,why:"Best fit: post-Cold-War Russia, where artists also mixed old communist imagery with the arrival of Western consumer culture. The other three had states that controlled or censored art, so open irony about consumerism was unlikely. Medium confidence, since I could not see the image.",sure:false}
+];
+var $=function(id){return document.getElementById(id)};
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+
+
+
+/* stored history (this device only) */
+var KEY='charles-history-quiz-v1',S={};
+try{S=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){S={}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function rec(id){return S[id]||(S[id]={a:0,c:0,ts:[],box:1,last:0})}
+var ITEMS=T.map(function(t,i){return {id:'t'+i,kind:'term',t:t,top:TOPOF[t[0]]!=null?TOPOF[t[0]]:3,target:8}})
+  .concat(EX.map(function(x){return {id:x.id,kind:'exam',x:x,top:x.top,target:75}}));
+function avg(a){return a.length?a.reduce(function(s,v){return s+v},0)/a.length:0}
+function weight(it){
+  var r=S[it.id];if(!r||!r.a)return it.kind==='exam'?4.5:3;
+  var w=1+4*(1-r.c/r.a)+(6-r.box)*0.6;
+  var at=avg(r.ts);if(at>it.target)w+=Math.min(2,at/it.target-1);
+  if(Date.now()-r.last>2*864e5)w+=0.5;
+  if(r.box>=5)w*=0.3;
+  if(it.kind==='exam')w*=1.3;
+  return w;
+}
+function pickWeighted(list,n){
+  var pool=list.slice(),out=[];
+  while(out.length<n&&pool.length){
+    var tot=pool.reduce(function(s,it){return s+weight(it)},0),r=Math.random()*tot,k=0;
+    for(;k<pool.length;k++){r-=weight(pool[k]);if(r<=0)break}
+    if(k>=pool.length)k=pool.length-1;
+    out.push(pool.splice(k,1)[0]);
+  }
+  return out;
+}
+
+/* dashboard */
+function tclass(p){return p<60?'low':p<80?'mid':'hi'}
+function topicRows(box,stats){
+  box.textContent='';
+  TOP.forEach(function(name,i){
+    var a=stats[i].a,c=stats[i].c,row=el('div','trow'),bar=el('div','bar'),fill=document.createElement('i');
+    var pct=a?Math.round(c/a*100):0;
+    fill.style.width=pct+'%';if(a)fill.className=tclass(pct);bar.appendChild(fill);
+    row.appendChild(el('span',null,name));row.appendChild(bar);row.appendChild(el('em',null,a?pct+'%':'new'));box.appendChild(row);
+  });
+}
+function tile(box,val,label){var d=el('div');d.appendChild(el('b',null,val));d.appendChild(el('span',null,label));box.appendChild(d)}
+function renderStats(){
+  var A=0,C=0,times=[],mastered=0,seen=0,tp=TOP.map(function(){return {a:0,c:0}});
+  ITEMS.forEach(function(it){var r=S[it.id];if(!r||!r.a)return;seen++;A+=r.a;C+=r.c;if(r.ts.length)times.push(avg(r.ts));if(r.box>=4)mastered++;tp[it.top].a+=r.a;tp[it.top].c+=r.c});
+  var d=$('dash');d.textContent='';
+  tile(d,A?Math.round(C/A*100)+'%':'none yet','Accuracy');
+  tile(d,times.length?avg(times).toFixed(1)+'s':'none yet','Avg time (terms+exam)');
+  tile(d,mastered+' / '+ITEMS.length,'Mastered');
+  tile(d,seen+' / '+ITEMS.length,'Seen');
+  topicRows($('topics'),tp);
+  var w=$('weak');w.textContent='';
+  var ranked=ITEMS.filter(function(it){var r=S[it.id];return r&&r.a}).sort(function(a,b){return weight(b)-weight(a)}).slice(0,5);
+  if(!ranked.length)w.appendChild(el('p','muted','Nothing yet. Play a round and your weak spots will show up here.'));
+  ranked.forEach(function(it){var r=S[it.id],d2=el('div');d2.appendChild(el('div',null,it.kind==='term'?it.t[0]:it.x.q.slice(0,60)+'...'));d2.appendChild(el('span',null,r.c+'/'+r.a+' right · '+avg(r.ts).toFixed(1)+'s'));w.appendChild(d2)});
+}
+renderStats();
+
+/* modes */
+var mode='mix';
+function setMode(m){mode=m;['mix','def','term'].forEach(function(k){$('m-'+k).setAttribute('aria-pressed',k===m)})}
+$('m-mix').onclick=function(){setMode('mix')};$('m-def').onclick=function(){setMode('def')};$('m-term').onclick=function(){setMode('term')};
+
+/* round engine */
+var deck=[],i=0,ok=0,streak=0,res=[],answered=false,t0=0,tick=null,cur=null;
+function begin(list){
+  deck=list;i=0;ok=0;streak=0;res=[];
+  $('done').hidden=true;$('game').hidden=false;$('tot').textContent=deck.length;
+  $('game').scrollIntoView({block:'nearest'});ask();
+}
+function stopTick(){if(tick){clearInterval(tick);tick=null}}
+function ask(){
+  answered=false;var it=deck[i];cur={it:it};
+  $('n').textContent=i+1;$('ok').textContent=ok;$('streak').textContent=streak;$('prog').style.width=(i/deck.length*100)+'%';
+  $('next').hidden=true;$('fb').hidden=true;
+  var box=$('opts');box.textContent='';var choices;
+  if(it.kind==='exam'){
+    $('src').textContent='Your exam, missed';$('q').textContent=it.x.q;
+    $('stim').hidden=!it.x.stim;$('stim').textContent=it.x.stim||'';
+    choices=it.x.o.map(function(txt,k){return {txt:txt,right:k===it.x.a}});
+  }else{
+    var m=mode==='mix'?(Math.random()<0.5?'def':'term'):mode;cur.m=m;
+    $('src').textContent=TOP[it.top];$('stim').hidden=true;
+    $('q').textContent=m==='def'?it.t[0]:it.t[1];
+    var same=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top===it.top}));
+    var rest=shuffle(ITEMS.filter(function(o){return o.kind==='term'&&o!==it&&o.top!==it.top}));
+    var others=same.concat(rest).slice(0,3);
+    choices=shuffle(others.concat([it])).map(function(o){return {txt:m==='def'?o.t[1]:o.t[0],right:o===it}});
+  }
+  if(it.kind==='exam')choices=shuffle(choices);
+  choices.forEach(function(c,k){
+    var b=el('button','opt');var key=el('kbd',null,String(k+1));var txt=el('span',null,c.txt);
+    b.appendChild(key);b.appendChild(txt);b.dataset.right=c.right;b.onclick=function(){pick(b,c.right)};box.appendChild(b);
+  });
+  t0=performance.now();stopTick();
+  $('timer').className='timer';$('timer').textContent='0.0s';
+  tick=setInterval(function(){var s=(performance.now()-t0)/1000;$('timer').textContent=s.toFixed(1)+'s';$('timer').className='timer'+(s>cur.it.target?' late':'')},100);
+}
+function pick(btn,right){
+  if(answered)return;answered=true;stopTick();
+  var it=cur.it,sec=(performance.now()-t0)/1000,slow=sec>it.target;
+  document.querySelectorAll('.opt').forEach(function(o){o.disabled=true;if(o.dataset.right==='true')o.classList.add('right')});
+  if(right){ok++;streak++}else{btn.classList.add('wrong');streak=0}
+  var r=rec(it.id);r.a++;if(right)r.c++;r.ts.push(Math.round(sec*10)/10);if(r.ts.length>5)r.ts.shift();
+  if(right&&!slow)r.box=Math.min(5,r.box+1);else if(!right)r.box=1;
+  r.last=Date.now();save();
+  res.push({it:it,ok:right,sec:sec,slow:slow,m:cur.m});
+  $('ok').textContent=ok;$('streak').textContent=streak;
+  var fb=$('fb');fb.textContent='';
+  fb.className='fb '+(right?(slow?'slow':'good'):'bad');
+  var head=right?(slow?'Correct, but slow ('+sec.toFixed(1)+'s, target '+it.target+'s). It will come back.':'Correct and fast ('+sec.toFixed(1)+'s).'):'Not this one ('+sec.toFixed(1)+'s). It will come back soon.';
+  fb.appendChild(el('b',null,head));
+  if(it.kind==='exam'){fb.appendChild(el('span',null,it.x.why));if(!it.x.sure)fb.appendChild(el('span','muted','My best reasoning, because the chart or passage was not provided. Check your teacher\'s key.'))}
+  else if(!right){fb.appendChild(el('span',null,it.t[0]+': '+it.t[1]))}
+  fb.hidden=false;
+  $('next').textContent=(i+1<deck.length)?'Next':'See results';$('next').hidden=false;$('next').focus();
+}
+$('next').onclick=function(){i++;if(i<deck.length)ask();else finish()};
+function finish(){
+  stopTick();$('game').hidden=true;$('done').hidden=false;
+  var n=res.length,fast=res.filter(function(r){return r.ok&&!r.slow}).length,slowc=res.filter(function(r){return r.ok&&r.slow}).length,wrong=n-ok;
+  $('result').textContent='You got '+ok+' of '+n+' ('+Math.round(ok/n*100)+'%)';
+  var d=$('rdash');d.textContent='';
+  tile(d,fast,'Correct and fast');tile(d,slowc,'Correct but slow');tile(d,wrong,'Wrong');tile(d,avg(res.map(function(r){return r.sec})).toFixed(1)+'s','Average time');
+  var tp=TOP.map(function(){return {a:0,c:0}});res.forEach(function(r){tp[r.it.top].a++;if(r.ok)tp[r.it.top].c++});
+  topicRows($('rtopics'),tp);
+  var bad=res.filter(function(r){return !r.ok||r.slow});
+  $('mh').textContent=bad.length?'Missed or slow':'Missed';
+  var m=$('missed');m.textContent='';
+  if(!bad.length)m.appendChild(el('p',null,'Clean round: every answer correct and fast.'));
+  bad.forEach(function(r){var dv=el('div');var t=r.it.kind==='term'?r.it.t[0]:('Exam '+r.it.x.id.slice(1));dv.appendChild(el('b',null,t+(r.ok?' (slow, '+r.sec.toFixed(1)+'s)':'')));dv.appendChild(document.createTextNode(': '+(r.it.kind==='term'?r.it.t[1]:r.it.x.o[r.it.x.a])));m.appendChild(dv)});
+  $('again-missed').hidden=!bad.length;
+  window._bad=bad.map(function(r){return r.it});
+  renderStats();
+}
+function smart(){
+  var exams=ITEMS.filter(function(it){return it.kind==='exam'}),terms=ITEMS.filter(function(it){return it.kind==='term'});
+  var a=pickWeighted(exams,Math.min(3,exams.length)),b=pickWeighted(terms,12-a.length);
+  return shuffle(a.concat(b));
+}
+$('go-ad').onclick=function(){begin(smart())};
+$('go-exam').onclick=function(){begin(ITEMS.filter(function(it){return it.kind==='exam'}))};
+$('go-all').onclick=function(){begin(shuffle(ITEMS.filter(function(it){return it.kind==='term'})))};
+$('again-smart').onclick=function(){begin(smart())};
+$('again-missed').onclick=function(){begin(shuffle(window._bad||[]))};
+var armed=false;
+$('reset').onclick=function(){
+  if(!armed){armed=true;$('reset').textContent='Tap again to erase all quiz history';setTimeout(function(){armed=false;$('reset').textContent='Reset my quiz history'},4000);return}
+  S={};save();armed=false;$('reset').textContent='Reset my quiz history';renderStats();
+};
+document.addEventListener('keydown',function(e){
+  if($('game').hidden||$('p-quiz').hidden)return;
+  if(e.key>='1'&&e.key<='4'&&!answered){var o=document.querySelectorAll('.opt')[+e.key-1];if(o)o.click()}
+  else if(e.key==='Enter'&&answered&&e.target===document.body){$('next').click()}
+});
+})();
+</script>
+
+</body></html>
