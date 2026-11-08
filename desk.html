@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Desk</title><meta name="theme-color" content="#07090f">
+<style>
+:root{--bg:#07090f;--glass:rgba(22,27,40,.72);--line:rgba(255,255,255,.1);--fg:#eef2fb;--mute:#97a3ba;--acc:#7cf0b6;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit;color:inherit}button{border:0;background:none;cursor:pointer}
+#wall{position:fixed;inset:0;background:radial-gradient(60vmax 60vmax at 15% 10%,#23406b,transparent 70%),radial-gradient(70vmax 70vmax at 90% 100%,#14684f,transparent 70%),#07090f}
+#icons{position:fixed;left:14px;top:14px;bottom:84px;display:grid;grid-auto-flow:column;grid-template-rows:repeat(auto-fill,88px);gap:6px;align-content:start}
+.ic{width:84px;height:84px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:12px;color:#fff;text-shadow:0 1px 6px #000}
+.ic:hover,.ic:focus-visible{background:rgba(255,255,255,.1);outline:none}
+.ic i,.dk i{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:22px}
+#bar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:6px;align-items:center;padding:7px;border-radius:99px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:9999}
+.dk{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;position:relative;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.dk:hover{transform:translateY(-4px) scale(1.1)}.dk i{width:38px;height:38px;font-size:19px}
+.dk.on:after{content:"";position:absolute;bottom:0;width:5px;height:5px;border-radius:50%;background:var(--acc)}
+#clock{padding:0 14px;color:var(--mute);font-size:13px;font-variant-numeric:tabular-nums}
+.win{position:fixed;display:flex;flex-direction:column;background:var(--glass);border:1px solid var(--line);border-radius:16px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 20px 60px -10px #000;overflow:hidden;min-width:260px;min-height:160px;resize:both}
+.tb{display:flex;align-items:center;gap:8px;padding:8px 10px 8px 14px;cursor:grab;touch-action:none;user-select:none;border-bottom:1px solid var(--line);font-weight:600;font-size:13px}
+.tb b{flex:1}.tb button{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.1)}
+.body{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column}
+.body textarea{flex:1;width:100%;border:0;background:transparent;padding:14px;resize:none;outline:none}
+.row{display:flex;gap:8px;padding:8px}.row input{flex:1;min-width:0;height:38px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.3);padding:0 12px}
+.btn{height:38px;padding:0 14px;border-radius:10px;background:rgba(255,255,255,.12);font-weight:600}
+iframe{flex:1;border:0;background:#fff}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px}.keys button{height:46px;border-radius:10px;background:rgba(255,255,255,.1);font-size:18px}
+.disp{padding:12px 16px;text-align:right;font-size:28px;font-variant-numeric:tabular-nums;min-height:56px}
+.big{font-size:54px;text-align:center;padding:20px;font-variant-numeric:tabular-nums}.note{color:var(--mute);font-size:12px;padding:6px 12px}
+.lk a{display:block;padding:10px 14px;color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line)}
+</style></head><body>
+<div id="wall"></div><div id="icons"></div><div id="bar"></div>
+<script>
+var MAIL="charles.osae@sascholar.org";
+var $=function(s){return document.querySelector(s)};
+function ls(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+var APPS={
+ browser:{n:"Study Browser",e:"🌐",c:"#3b82f6",w:560,h:420,run:function(b){b.innerHTML='<div class="row"><input id="u" placeholder="Search or type a web address"><button class="btn" id="go">Go</button></div><iframe id="f" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-same-origin allow-popups"></iframe><div class="note">Many sites refuse to load inside another page. Use “Open in tab” for those.</div><div class="row"><button class="btn" id="tab">Open in tab</button></div>';
+  function url(){var v=b.querySelector("#u").value.trim();if(!v)return"";if(!/^https?:\/\//i.test(v))v=/\s/.test(v)||!/\./.test(v)?"https://duckduckgo.com/?q="+encodeURIComponent(v):"https://"+v;return v}
+  b.querySelector("#go").onclick=function(){var u=url();if(u)b.querySelector("#f").src=u};b.querySelector("#tab").onclick=function(){var u=url();if(u)open(u,"_blank","noopener")};b.querySelector("#u").onkeydown=function(e){if(e.key==="Enter")b.querySelector("#go").click()}}},
+ notes:{n:"Notes",e:"📝",c:"#f59e0b",w:380,h:360,run:function(b){var t=document.createElement("textarea");t.placeholder="Type here. Saved on this device.";t.value=ls("desk-notes","");t.oninput=function(){sv("desk-notes",t.value)};b.appendChild(t)}},
+ calc:{n:"Calculator",e:"🧮",c:"#64748b",w:290,h:400,run:function(b){var d=document.createElement("div");d.className="disp";d.textContent="0";var k=document.createElement("div");k.className="keys";var s="";
+  "C ( ) /|7 8 9 *|4 5 6 -|1 2 3 +|0 . ⌫ =".split("|").join(" ").split(" ").forEach(function(c){var x=document.createElement("button");x.textContent=c;x.onclick=function(){if(c==="C")s="";else if(c==="⌫")s=s.slice(0,-1);else if(c==="="){try{if(/^[0-9+\-*\/(). ]+$/.test(s))s=String(+(Function('"use strict";return ('+s+')')()).toFixed(10))}catch(e){s="Error"}}else{if(s==="Error")s="";s+=c}d.textContent=s||"0"};k.appendChild(x)});b.appendChild(d);b.appendChild(k)}},
+ timer:{n:"Focus timer",e:"⏱️",c:"#ef4444",w:300,h:240,run:function(b){var left=25*60,iv=null;b.innerHTML='<div class="big" id="t">25:00</div><div class="row"><button class="btn" id="s">Start</button><button class="btn" id="r">Reset</button></div>';var t=b.querySelector("#t");function draw(){t.textContent=String(Math.floor(left/60)).padStart(2,"0")+":"+String(left%60).padStart(2,"0")}
+  b.querySelector("#s").onclick=function(){if(iv){clearInterval(iv);iv=null;this.textContent="Start";return}this.textContent="Pause";var me=this;iv=setInterval(function(){left--;draw();if(left<=0){clearInterval(iv);iv=null;me.textContent="Start";t.textContent="Done"}},1000)};b.querySelector("#r").onclick=function(){left=25*60;draw()};}},
+ links:{n:"Links",e:"🔗",c:"#14b8a6",w:380,h:380,run:function(b){var L=ls("desk-links",[["YouTube","https://www.youtube.com"],["Spotify","https://open.spotify.com"],["Wikipedia","https://www.wikipedia.org"]]);b.innerHTML='<div class="row"><input id="n" placeholder="Name" style="max-width:110px"><input id="a" placeholder="https://…"><button class="btn" id="ad">Add</button></div><div class="lk" id="l"></div>';
+  function draw(){var l=b.querySelector("#l");l.innerHTML="";L.forEach(function(x,i){var a=document.createElement("a");a.textContent=x[0];a.href=x[1];a.target="_blank";a.rel="noopener";a.oncontextmenu=function(e){e.preventDefault();L.splice(i,1);sv("desk-links",L);draw()};l.appendChild(a)})}
+  b.querySelector("#ad").onclick=function(){var n=b.querySelector("#n").value.trim(),a=b.querySelector("#a").value.trim();if(n&&/^https:\/\//i.test(a)){L.push([n,a]);sv("desk-links",L);b.querySelector("#n").value=b.querySelector("#a").value="";draw()}};draw();var h=document.createElement("div");h.className="note";h.textContent="Your own bookmarks. Right-click or long-press to remove.";b.appendChild(h)}},
+ mail:{n:"Mail me a link",e:"✉️",c:"#8b5cf6",w:380,h:250,run:function(b){b.innerHTML='<div class="note">Opens your mail app with a message to '+MAIL+'.</div><div class="row"><input id="m" placeholder="Paste a link to send"></div><div class="row"><button class="btn" id="se">Open mail</button></div>';b.querySelector("#se").onclick=function(){var v=b.querySelector("#m").value.trim();location.href="mailto:"+MAIL+"?subject="+encodeURIComponent("Link")+"&body="+encodeURIComponent(v||location.href)}}}
+};
+var z=10,open_={};
+function mk(id){var A=APPS[id];if(open_[id]){open_[id].style.zIndex=++z;return}
+ var w=document.createElement("div");w.className="win";var W=Math.min(A.w,innerWidth-16),H=Math.min(A.h,innerHeight-100);w.style.cssText="width:"+W+"px;height:"+H+"px;left:"+Math.max(8,(innerWidth-W)/2+Object.keys(open_).length*24)+"px;top:"+Math.max(8,(innerHeight-H)/3+Object.keys(open_).length*24)+"px;z-index:"+(++z);
+ w.innerHTML='<div class="tb"><span>'+A.e+'</span><b>'+A.n+'</b><button aria-label="Close">✕</button></div><div class="body"></div>';document.body.appendChild(w);open_[id]=w;A.run(w.querySelector(".body"));mark();
+ w.addEventListener("pointerdown",function(){w.style.zIndex=++z});w.querySelector("button").onclick=function(){w.remove();delete open_[id];mark()};
+ var tb=w.querySelector(".tb");tb.onpointerdown=function(e){if(e.target.tagName==="BUTTON")return;var dx=e.clientX-w.offsetLeft,dy=e.clientY-w.offsetTop;tb.setPointerCapture(e.pointerId);tb.onpointermove=function(m){w.style.left=Math.min(Math.max(-W+80,m.clientX-dx),innerWidth-80)+"px";w.style.top=Math.min(Math.max(0,m.clientY-dy),innerHeight-60)+"px"};tb.onpointerup=function(){tb.onpointermove=null}}}
+function mark(){[].forEach.call(document.querySelectorAll(".dk"),function(d){d.classList.toggle("on",!!open_[d.dataset.id])})}
+Object.keys(APPS).forEach(function(id){var A=APPS[id];
+ var i=document.createElement("button");i.className="ic";i.innerHTML='<i style="background:'+A.c+'">'+A.e+'</i>'+A.n;i.ondblclick=function(){mk(id)};i.onclick=function(){if(matchMedia("(pointer:coarse)").matches)mk(id)};i.onkeydown=function(e){if(e.key==="Enter")mk(id)};$("#icons").appendChild(i);
+ var d=document.createElement("button");d.className="dk";d.dataset.id=id;d.title=A.n;d.setAttribute("aria-label",A.n);d.innerHTML='<i style="background:'+A.c+'">'+A.e+'</i>';d.onclick=function(){mk(id)};$("#bar").appendChild(d)});
+var c=document.createElement("span");c.id="clock";$("#bar").appendChild(c);function tick(){c.textContent=new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}tick();setInterval(tick,15000);
+var back=document.createElement("a");back.href="./";back.textContent="Launcher";back.className="dk";back.style.cssText="width:auto;padding:0 12px;border-radius:99px;font-size:13px;color:var(--mute);text-decoration:none";$("#bar").insertBefore(back,$("#bar").firstChild);
+</script></body></html>
